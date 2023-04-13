@@ -1,4 +1,3 @@
-
 #include <iostream>
 #include <string>
 #include <fstream>
@@ -72,6 +71,7 @@ void zapis(string a, string b, string c) {
 }
 
 int main() {
+    unsigned int start = clock();
     string a = "a.txt", b = "b.txt", c = "c.txt";
     zapis(a, b, c);
 
@@ -126,4 +126,7 @@ int main() {
         file_a << endl;
     }
     file_a.close();
+    unsigned int end = clock();
+    cout << "Time = " << (end - start) << " ms ";
+    return 0;
 }
