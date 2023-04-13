@@ -27,6 +27,9 @@ struct film {
 };
 
 // Функция для слияния двух отсортированных массивов
+int strnatcmp(const char* a, const char* b);
+int strnatcasecmp(const char* a, const char* b);
+
 void merge_natural(vector<film>& films, int start, int mid, int end, string field) {
     // Создание векторов для левой и правой половин
     vector<film> films_l(films.begin() + start, films.begin() + mid + 1);
@@ -35,13 +38,21 @@ void merge_natural(vector<film>& films, int start, int mid, int end, string fiel
     int i = 0, j = 0;
     // Объединение двух половин, сравнивая значения в соответствии с полем сортировки
     while (i < films_l.size() && j < films_r.size()) {
-        if (field == "director" && films_l[i].director.compare(films_r[j].director) >= 0) {
+        const char* a = nullptr;
+        const char* b = nullptr;
+        if (field == "director") {
+            a = films_l[i].director.c_str();
+            b = films_r[j].director.c_str();
+        }
+        else {
+            // При необходимости добавьте сравнение для других полей
+        }
+        if (strnatcasecmp(a, b) > 0) {
             films_merged.push_back(films_r[j++]);
         }
         else {
             films_merged.push_back(films_l[i++]);
         }
-    }
     // Добавление оставшихся элементов в вектор объединенных элементов
     while (i < films_l.size()) {
         films_merged.push_back(films_l[i++]);
@@ -68,10 +79,10 @@ vector<film> merge_sort_natural(vector<film>& films, string field) {
     while (end < films.size() - 1) {
         // Ищем возрастающие подпоследовательности (runs) элементов
         for (mid = start + 1; mid < films.size() &&
-                              (field == "director" && films[mid].director >= films[mid - 1].director); mid++);
+            (field == "director" && films[mid].director >= films[mid - 1].director); mid++);
 
         for (end = mid; end < films.size() &&
-                        (field == "director" && films[end].director >= films[end - 1].director); end++);
+            (field == "director" && films[end].director >= films[end - 1].director); end++);
 
         // Объединяем найденные подпоследовательности элементов
         merge_natural(films, start, mid - 1, end - 1, field);
@@ -137,13 +148,13 @@ int main() {
     file_b.close(), file_c.close();  // закрытие файловых потоков
 
     string filed;  // создание переменной filed типа string
-    vector<film> sorted_films = merge_sort_natural(films,filed);  // сортировка вектора films и сохранение результата в sorted_films
+    vector<film> sorted_films = merge_sort_natural(films, filed);  // сортировка вектора films и сохранение результата в sorted_films
 
     ofstream file_a(a);  // создание потока для записи в файл a
     for (int i = 0; i < sorted_films.size(); i++) {  // цикл по элементам отсортированного вектора
         // запись данных фильма в файл a
         file_a << sorted_films[i].title << " " << sorted_films[i].studio << " " << sorted_films[i].genre << " "
-               << sorted_films[i].year << " " << sorted_films[i].director << " ";
+            << sorted_films[i].year << " " << sorted_films[i].director << " ";
         for (int j = 0; j < sorted_films[i].actors.size(); j++) {  // цикл по актерам фильма
             file_a << sorted_films[i].actors[j] << " ";  // запись актера в файл
         }
