@@ -6,7 +6,7 @@
 #include <sstream>
 
 using namespace std;
-
+// Структура для представления фильма
 struct film {
     string title;
     string studio;
@@ -26,13 +26,14 @@ struct film {
     }
 };
 
-// Function to merge two sorted arrays with natural merge sort
+// Функция для слияния двух отсортированных массивов
 void merge_natural(vector<film>& films, int start, int mid, int end, string field) {
+    // Создание векторов для левой и правой половин
     vector<film> films_l(films.begin() + start, films.begin() + mid + 1);
     vector<film> films_r(films.begin() + mid + 1, films.begin() + end + 1);
     vector<film> films_merged;
-
     int i = 0, j = 0;
+    // Объединение двух половин, сравнивая значения в соответствии с полем сортировки
     while (i < films_l.size() && j < films_r.size()) {
         if (field == "director" && films_l[i].director.compare(films_r[j].director) >= 0) {
             films_merged.push_back(films_r[j++]);
@@ -41,7 +42,7 @@ void merge_natural(vector<film>& films, int start, int mid, int end, string fiel
             films_merged.push_back(films_l[i++]);
         }
     }
-
+    // Добавление оставшихся элементов в вектор объединенных элементов
     while (i < films_l.size()) {
         films_merged.push_back(films_l[i++]);
     }
@@ -50,13 +51,14 @@ void merge_natural(vector<film>& films, int start, int mid, int end, string fiel
         films_merged.push_back(films_r[j++]);
     }
 
+    // Копирование объединенных элементов в оригинальный массив
     for (int i = 0; i < films_merged.size(); i++) {
         films[start + i] = films_merged[i];
     }
 }
 
 
-// Function to sort an array using natural merge sort algorithm
+// Функция для сортировки массива
 vector<film> merge_sort_natural(vector<film>& films, string field) {
     if (films.size() <= 1) {
         return;
@@ -64,21 +66,21 @@ vector<film> merge_sort_natural(vector<film>& films, string field) {
 
     int start = 0, mid = 0, end = 0;
     while (end < films.size() - 1) {
-        // find the runs
+        // Ищем возрастающие подпоследовательности (runs) элементов
         for (mid = start + 1; mid < films.size() &&
-            (field == "director" && films[mid].director >= films[mid - 1].director); mid++);
+                              (field == "director" && films[mid].director >= films[mid - 1].director); mid++);
 
         for (end = mid; end < films.size() &&
-            (field == "director" && films[end].director >= films[end - 1].director); end++);
+                        (field == "director" && films[end].director >= films[end - 1].director); end++);
 
-        // merge the runs
+        // Объединяем найденные подпоследовательности элементов
         merge_natural(films, start, mid - 1, end - 1, field);
         start = end;
     }
     return films;
 }
 
-// Запись
+// Функция записи содержимого файла a в два файла b и c
 void zapis(string a, string b, string c) {
     ifstream file_a(a);
     ofstream file_b(b), file_c(c);
@@ -93,56 +95,60 @@ void zapis(string a, string b, string c) {
 
 int main() {
     string a = "a.txt", b = "b.txt", c = "c.txt";
-    zapis(a, b, c);
+    zapis(a, b, c);  // задаются названия файлов и вызывается функция zapis, которая создает файлы и заполняет их случайными данными
 
-    vector<film> films;
-    ifstream file_b(b), file_c(c);
+    vector<film> films;  // объявление вектора структур film
+    ifstream file_b(b), file_c(c);  // создание потоков для чтения файлов b и c
     string line;
-    while (getline(file_b, line)) {
-        istringstream iss(line);
+    while (getline(file_b, line)) {  // чтение строк из файла b
+        istringstream iss(line);  // создание потока для чтения из строки
         string t, s, g, d, a;
         int y;
 
-        if (iss >> t >> s >> g >> y >> d) {
+        if (iss >> t >> s >> g >> y >> d) {  // чтение данных из строки
             // Чтение списка актеров
             vector<string> actors;
-            while (iss >> a) {
-                actors.push_back(a);
+            while (iss >> a) {  // чтение списка актеров из строки
+                actors.push_back(a);  // добавление актера в вектор
             }
 
             // Создание экземпляра структуры film и добавление его в вектор
             film f(t, s, g, y, d, actors);
-            films.push_back(f);
+            films.push_back(f);  // добавление фильма в вектор
         }
     }
-    while (getline(file_c, line)) {
-        istringstream iss(line);
+    while (getline(file_c, line)) {  // чтение строк из файла c
+        istringstream iss(line);  // создание потока для чтения из строки
         string t, s, g, d, a;
         int y;
 
-        if (iss >> t >> s >> g >> y >> d) {
+        if (iss >> t >> s >> g >> y >> d) {  // чтение данных из строки
             // Чтение списка актеров
             vector<string> actors;
-            while (iss >> a) {
-                actors.push_back(a);
+            while (iss >> a) {  // чтение списка актеров из строки
+                actors.push_back(a);  // добавление актера в вектор
             }
 
             // Создание экземпляра структуры film и добавление его в вектор
             film f(t, s, g, y, d, actors);
-            films.push_back(f);
+            films.push_back(f);  // добавление фильма в вектор
         }
     }
-    file_b.close(), file_c.close();
-    string filed;
-    vector<film> sorted_films = merge_sort_natural(films,filed);
-    ofstream file_a(a);
-    for (int i = 0; i < sorted_films.size(); i++) {
+    file_b.close(), file_c.close();  // закрытие файловых потоков
+
+    string filed;  // создание переменной filed типа string
+    vector<film> sorted_films = merge_sort_natural(films,filed);  // сортировка вектора films и сохранение результата в sorted_films
+
+    ofstream file_a(a);  // создание потока для записи в файл a
+    for (int i = 0; i < sorted_films.size(); i++) {  // цикл по элементам отсортированного вектора
+        // запись данных фильма в файл a
         file_a << sorted_films[i].title << " " << sorted_films[i].studio << " " << sorted_films[i].genre << " "
-            << sorted_films[i].year << " " << sorted_films[i].director << " ";
-        for (int j = 0; j < sorted_films[i].actors.size(); j++) {
-            file_a << sorted_films[i].actors[j] << " ";
+               << sorted_films[i].year << " " << sorted_films[i].director << " ";
+        for (int j = 0; j < sorted_films[i].actors.size(); j++) {  // цикл по актерам фильма
+            file_a << sorted_films[i].actors[j] << " ";  // запись актера в файл
         }
         file_a << endl;
+
     }
     file_a.close();
 
