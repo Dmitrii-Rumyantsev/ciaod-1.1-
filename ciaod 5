@@ -1,0 +1,170 @@
+#include "iostream"
+
+using namespace std;
+
+struct Node{
+    int val;
+    Node* next;
+    Node(int _val) : val(_val), next(nullptr){}
+};
+
+struct list{
+    Node* first;
+    Node* last;
+    list():first(nullptr),last(nullptr){}
+
+
+    bool is_empty(){
+        return first == nullptr;
+    }
+
+    void push_front(int _val){
+        Node* p = new Node(_val);
+        if(is_empty()){
+            first = p ;
+            first->next = nullptr;
+            return;
+        }
+
+        p->next = first;
+        first = p;
+    }
+
+    void remove(int _val){
+        if(is_empty()){
+            return;
+        }
+        if(first->val == _val){
+            Node* p = first;
+            first = p->next;
+            delete p;
+        }
+        else if(last->val == _val){
+            Node* p = first;
+            while (p->next != last){
+                p = p->next;
+
+            }
+            p->next = nullptr;
+            last = p;
+            delete p;
+        }
+        Node* slow = first;
+        Node* fast = first->next;
+        while (fast && fast->val != _val){
+            fast = fast->next;
+            slow = slow->next;
+        }
+        if(!fast){
+            cout << "Элемент не найден" << endl;
+            return;
+        }
+
+        slow->next = fast->next;
+        delete slow;
+        delete fast;
+    }
+
+
+    void print(){
+        if(is_empty()) return;
+        Node* p = first;
+        while (p){
+            cout << p->val << " ";
+            p = p->next;
+        }
+        cout << endl;
+    }
+
+    void array(list& L, Node** A) {
+        for (int i = 0; i < 10; ++i) {
+            A[i] = nullptr;
+        }
+
+        Node* current = L.first;
+
+        while (current != nullptr) {
+            int number = current->val;
+            int firstdig = number / 10;
+
+            // Переносим текущий узел в массив
+            Node* temp = current;
+            current = current->next;
+
+            if (A[firstdig] == nullptr) {
+                // Если в A[firstdig] еще нет узлов, добавляем текущий узел
+                A[firstdig] = temp;
+                A[firstdig]->next = nullptr;
+            } else {
+                // Если в A[firstdig] уже есть узлы, находим последний и добавляем после него
+                Node* last = A[firstdig];
+                while (last->next != nullptr) {
+                    last = last->next;
+                }
+                last->next = temp;
+                temp->next = nullptr;
+            }
+        }
+        // Обнуляем указатели первого и последнего узлов списка, так как они могут измениться
+        L.first = nullptr;
+        L.last = nullptr;
+    }
+
+
+    void remove_list(){
+        while (first->next != last){
+                Node* p = first;
+                first = p->next;
+                delete p;
+        }
+    }
+
+
+    void create_list(Node** A) {
+        for (int i = 0; i < 10; ++i) {
+            if(A[i]!= nullptr){
+                if(first == nullptr){
+                    first = A[i];
+                    last = A[i];
+                } else{
+                    last->next = A[i];
+                    last = A[i];
+                }
+            }
+        }
+    }
+
+    void fill_list(list& L) {
+        int values[] = {10, 50, 20, 60, 30, 7, 4, 8, 9, 0};
+        int n = sizeof(values) / sizeof(values[0]);
+        for (int i = 0; i < n; i++) {
+            L.push_front(values[i]);
+        }
+    }
+};
+
+int main(){
+    system("chcp 65001");
+    list L;
+    int n, val;
+    cout << "Введите количество элементов списка: ";
+    cin >> n;
+    cout << "Введите значение элемента: ";
+    for (int i = 0; i < n; i++) {
+        cin >> val;
+        L.push_front(val);
+    }
+    L.print();
+    Node* A[10];
+    L.fill_list(L);
+    L.array(L, A);
+    L.create_list(A);
+    Node* current = L.first;
+    while (current != nullptr) {
+        cout << current->val << " ";
+        current = current->next;
+    }
+    cout << endl;
+
+    return 0;
+}
