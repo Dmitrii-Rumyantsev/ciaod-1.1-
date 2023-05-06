@@ -73,8 +73,13 @@ int cl_base::count(string s_name)
 }
 
 cl_base* cl_base::find_object_from_current(string s_name) {
+    if(this->count(s_name) != 1){
+        return nullptr;
+    }
 
+    return search_object(s_name);
 }
+
 cl_base* cl_base::search_object(string s_name)
 {
     if (this->count(s_name) != 1)
@@ -318,7 +323,7 @@ cl_base* cl_base::find_obj_by_coord(string s_coord) {//Поиск объекта
     }
     else{
         if(i_slash_2!= -1){
-            s_nam = s_coord.substr(0,i_slash_2-1);
+            s_nam = s_coord.substr(0,i_slash_2);
             p_obj = this->get_sub_object(s_nam);
             if(p_obj!= nullptr){
                 return p_obj->find_obj_by_coord(s_coord.substr(i_slash_2+1));

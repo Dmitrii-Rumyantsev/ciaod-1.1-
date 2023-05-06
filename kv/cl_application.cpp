@@ -74,7 +74,7 @@ int cl_application::exec_app() {
 
         }
         if(action =="FIND"){
-            if(s_now->find_obj_by_coord(path)){
+            if(this->find_obj_by_coord(path)){
                 cl_base* p_object = s_now->find_obj_by_coord(path);
                 cout << path << "     Object name: " << p_object->get_name() << endl;
             }
