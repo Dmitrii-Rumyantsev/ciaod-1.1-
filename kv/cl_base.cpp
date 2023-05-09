@@ -1,5 +1,11 @@
 
 #include "cl_base.h"
+#include "cl_application.h"
+#include "cl_2.h"
+#include "cl_3.h"
+#include "cl_4.h"
+#include "cl_5.h"
+#include "cl_6.h"
 
 cl_base::cl_base(cl_base* head_object, string s_name) {
     this->s_name = s_name;
@@ -340,7 +346,7 @@ cl_base* cl_base::find_obj_by_coord(string s_coord) {//Поиск объекта
 }
 
 //Факультатив КВ_4
-/*
+
 void cl_base::set_connection(TYPE_SIGNAL p_signal, cl_base* p_target, TYPE_HANDLER p_handler){
     o_sh* p_value;
     for(int i = 0; i < connects.size();i++){
@@ -371,6 +377,18 @@ void cl_base::delete_connection(TYPE_SIGNAL p_signal, cl_base* p_target, TYPE_HA
 
 }
 
+string cl_base::get_absolute_way() {
+    string way = "";
+    if(this->p_head_object)
+        way = "/";
+    cl_base* obj = this;
+    while(obj->p_head_object){
+        way = "/" + obj->get_name() + way;
+        obj = obj->get_head_object();
+    }
+    return way;
+}
+
 void cl_base::emit_signal(TYPE_SIGNAL p_signal, string s_message){
     (this->*p_signal)(s_message);
     for(auto connection: connects){
@@ -381,5 +399,53 @@ void cl_base::emit_signal(TYPE_SIGNAL p_signal, string s_message){
             (p_target->*p_handler)(s_message);
         }
     }
-}*/
+}
 
+TYPE_SIGNAL cl_base::get_signal(cl_base* object){
+    string obj_class = typeid(*object).name();
+    if(obj_class.find("cl_base")!= string::npos){
+        return SIGNAL_D(cl_application::signal_1);
+    }
+    else if(obj_class.find("cl_2")!= string::npos){
+        return SIGNAL_D(cl_2::signal_2);
+    }
+    else if(obj_class.find("cl_3")!= string::npos){
+        return SIGNAL_D(cl_3::signal_3);
+    }
+    else if(obj_class.find("cl_4")!= string::npos){
+        return SIGNAL_D(cl_4::signal_4);
+    }
+    else if(obj_class.find("cl_5")!= string::npos){
+        return SIGNAL_D(cl_5::signal_5);
+    }
+    else if(obj_class.find("cl_6")!= string::npos){
+        return SIGNAL_D(cl_6::signal_6);
+    }
+}
+
+
+TYPE_HANDLER cl_base::get_handler(cl_base *object) {
+    string obj_class = typeid(*object).name();
+    if(obj_class.find("cl_base")!= string::npos){
+        return HANDLER_D(cl_application::handler_1);
+    }
+    else if(obj_class.find("cl_2")!= string::npos){
+        return HANDLER_D(cl_2::handler_2);
+    }
+    else if(obj_class.find("cl_3")!= string::npos){
+        return HANDLER_D(cl_3::handler_3);
+    }
+    else if(obj_class.find("cl_4")!= string::npos){
+        return HANDLER_D(cl_4::handler_4);
+    }
+    else if(obj_class.find("cl_5")!= string::npos){
+        return HANDLER_D(cl_5::handler_5);
+    }
+    else if(obj_class.find("cl_6")!= string::npos){
+        return HANDLER_D(cl_6::handler_6);
+    }
+}
+
+int cl_base::get_ready(){
+    return state;
+}

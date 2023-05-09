@@ -10,7 +10,9 @@
 
 class cl_2 : public cl_base {
 public:
-    cl_2(cl_base* head_object, string s_name);
+    using cl_base::cl_base;
+    void signal_2(string& msg);
+    void handler_2(string msg);
 };
 
 

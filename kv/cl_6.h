@@ -8,7 +8,9 @@
 #include "cl_base.h"
 class cl_6 : public cl_base{
 public:
-    cl_6(cl_base* head_object, string s_name);
+    using cl_base::cl_base;
+    void signal_6(string& msg);
+    void handler_6(string msg);
 };
 
 #endif //UNTITLED9_CL_6_H

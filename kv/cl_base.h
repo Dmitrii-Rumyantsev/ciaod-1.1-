@@ -12,8 +12,8 @@
 #include <queue>
 using namespace std;
 
-/*#define SIGNAL_D(signal_f)(TYPE_SIGNAL_D)(&signal_f)
-#define HANDLER_D(handle_f)(TYPE_HANDLE_D)(&handler_f)
+#define SIGNAL_D(signal_f) (TYPE_SIGNAL) (&signal_f)
+#define HANDLER_D(hendler_f) (TYPE_HANDLER) (&hendler_f)
 
 
 class cl_base;
@@ -25,15 +25,15 @@ struct o_sh{
     cl_base* p_target;
     TYPE_HANDLER p_handler;
 
-};*/
+};
 
 class cl_base {
 private:
     string s_name;
-    int state;
+    int state = 1;
     cl_base* p_head_object;
     vector <cl_base*> sub_objects;
-    /*vector <o_sh*> connects;*/
+    vector <o_sh*> connects;
 public:
     cl_base* s_now;
     cl_base(cl_base* head_object, string s_name = "Base object");
@@ -47,12 +47,14 @@ public:
     cl_base* search_object(string s_name);
     cl_base* find_object_from_root(string s_name);
     bool can_be_ready();
+    int get_ready();
     void set_state(int state);
     void print_status();
     bool set_head_object(cl_base* now);
     bool delete_sub_object(string find_name);
     cl_base* find_object_from_current(string s_name);
     cl_base* search_object_from_path(string s_path);
+    string get_absolute_way();
 
 
     //Факультатив КВ_3
@@ -61,10 +63,12 @@ public:
 
 
     //Факультатив КВ_4
-/*
+
     void set_connection(TYPE_SIGNAL p_signal, cl_base* p_target, TYPE_HANDLER p_handler);
     void delete_connection(TYPE_SIGNAL p_signal, cl_base* p_target, TYPE_HANDLER p_handler);
-    void emit_signal(TYPE_SIGNAL p_signal, string s_message);*/
+    void emit_signal(TYPE_SIGNAL p_signal, string s_message);
+    TYPE_SIGNAL get_signal(cl_base* object);
+    TYPE_HANDLER get_handler(cl_base* object);
 };
 
 

@@ -9,7 +9,9 @@
 #include "cl_base.h"
 class cl_5 : public cl_base{
 public:
-    cl_5(cl_base* head_object, string s_name);
+    using cl_base::cl_base;
+    void signal_5(string& msg);
+    void handler_5(string msg);
 };
 
 

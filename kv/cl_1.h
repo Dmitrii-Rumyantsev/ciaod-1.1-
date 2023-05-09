@@ -11,8 +11,8 @@
 class cl_1 : public cl_base {
 public:
     cl_1(cl_base* head_object, string s_name);
-    /*void signal_f(string &msg);
-    void handler_f(string msg);*/
+    void signal_f(string &msg);
+    void handler_f(string msg);
 };
 
 #endif //UNTITLED9_CL_1_H

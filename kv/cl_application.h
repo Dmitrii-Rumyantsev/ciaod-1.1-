@@ -10,10 +10,18 @@
 #include "cl_1.h"
 
 class cl_application : public cl_base {
+private:
+    bool flag = 1;
 public:
     cl_application(cl_base* head_object);
     void build_tree_objects();
     int exec_app();
+    void signal_1(string&);
+    void handler_1(string);
+    void signal_2(string&);
+    void handler_2(string);
+    void signal_3(string&);
+    void handler_3(string);
 
 };
 
